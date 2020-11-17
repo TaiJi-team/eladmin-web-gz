@@ -100,7 +100,7 @@ export default {
         this.loginForm.uuid = res.uuid
       })
     },
-    getCookie() {
+    /* getCookie() {
       const username = Cookies.get('username')
       let password = Cookies.get('password')
       const rememberMe = Cookies.get('rememberMe')
@@ -113,7 +113,7 @@ export default {
         rememberMe: rememberMe === undefined ? false : Boolean(rememberMe),
         code: ''
       }
-    },
+    },*/
     handleLogin() {
       this.$refs.loginForm.validate(valid => {
         const user = {

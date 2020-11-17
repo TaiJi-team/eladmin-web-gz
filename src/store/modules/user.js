@@ -1,9 +1,11 @@
-import { login, getInfo, logout } from '@/api/login'
-import { getToken, setToken, removeToken } from '@/utils/auth'
+import { getToken, login, getInfo, logout } from '@/api/login'
+// import { getToken, setToken, removeToken } from '@/utils/auth'
+import Cookies from 'js-cookie'
 
 const user = {
   state: {
-    token: getToken(),
+    // token: getToken(),
+    token: '',
     user: {},
     roles: [],
     // 第一次加载菜单时用到
@@ -24,20 +26,26 @@ const user = {
       state.loadMenus = loadMenus
     }
   },
-
   actions: {
     // 登录
     Login({ commit }, userInfo) {
-      const rememberMe = userInfo.rememberMe
+      // commit('SET_TOKEN', 'Basic d2ViQXBwOndlYkFwcA==')
+      Cookies.set('token', 'Basic d2ViQXBwOndlYkFwcA==')
       return new Promise((resolve, reject) => {
-        // login(userInfo.username, userInfo.password, userInfo.code, userInfo.uuid).then(res => {
-        login(userInfo.username, userInfo.password, userInfo.deviceid).then(res => {
-          // setToken(res.token, rememberMe)
-          // commit('SET_TOKEN', res.token)
-          // setUserInfo(res.user, commit)
-          // 第一次加载菜单时用到， 具体见 src 目录下的 permission.js
-          commit('SET_LOAD_MENUS', true)
-          resolve()
+        getToken(userInfo.username, userInfo.password, userInfo.deviceid).then(res => {
+          // commit('SET_LOAD_MENUS', true)
+          console.log(res)
+          Cookies.set('token', 'Bearer ' + res.datas.access_token)
+          login(userInfo.username, userInfo.password, userInfo.deviceid).then(res => {
+            setUserInfo(res.user, commit)
+            // 第一次加载菜单时用到， 具体见 src 目录下的 permission.js
+            commit('SET_LOAD_MENUS', true)
+            resolve()
+          }).catch(error => {
+            reject(error)
+          })
+
+          resolve(res)
         }).catch(error => {
           reject(error)
         })
@@ -79,7 +87,7 @@ const user = {
 export const logOut = (commit) => {
   commit('SET_TOKEN', '')
   commit('SET_ROLES', [])
-  removeToken()
+  // removeToken()
 }
 
 export const setUserInfo = (res, commit) => {

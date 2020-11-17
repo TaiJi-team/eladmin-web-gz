@@ -1,5 +1,17 @@
 import request from '@/utils/request'
 
+export function getToken(username, password, deviceid) {
+  return request({
+    url: '/api-uaa/oauth/user/token',
+    method: 'post',
+    data: {
+      username,
+      password,
+      deviceid
+    }
+  })
+}
+
 // export function login(username, password, code, uuid) {
 export function login(username, password, deviceid) {
   return request({

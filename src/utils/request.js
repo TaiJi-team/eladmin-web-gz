@@ -18,7 +18,9 @@ service.interceptors.request.use(
     /* if (getToken()) {
       config.headers['Authorization'] = getToken() // 让每个请求携带自定义token 请根据实际情况自行修改
     } */
-    config.headers['Authorization'] = 'Bearer 973dae41-ddac-4cfe-b401-e1e6b2d4fb19' // 让每个请求携带自定义token 请根据实际情况自行修改
+    // config.headers['Authorization'] = 'Bearer 973dae41-ddac-4cfe-b401-e1e6b2d4fb19' // 让每个请求携带自定义token 请根据实际情况自行修改
+    // config.headers['Authorization'] = store.getters.getToken() // 让每个请求携带自定义token 请根据实际情况自行修改
+    config.headers['Authorization'] = Cookies.get('token')
     config.headers['Content-Type'] = 'application/json'
     return config
   },
